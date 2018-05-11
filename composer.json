@@ -1,0 +1,27 @@
+{
+    "name": "root/entityconverter",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexander",
+            "email": "mail@kladov.xyz"
+        }
+    ],
+    "require": {
+        "doctrine/annotations": "^1.6"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Quantick\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Quantick\\Tests\\": "tests/"
+        }
+    }
+}

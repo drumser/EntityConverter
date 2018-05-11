@@ -51,40 +51,39 @@ class EntityConverter
 
 //region SECTION: Public
     /**
-     * @param       $from
-     * @param       $to
+     * @param       $source
+     * @param       $target
      *
      * @param array $mapArray
      *
      * @return mixed
      */
-    public function convert($from, $to, array $mapArray = [])
+    public function convert($source, $target, array $mapArray = [])
     {
-        $oldReflection = new \ReflectionObject($from);
-        $newReflection = new \ReflectionObject($to);
+        $sourceRef = new \ReflectionObject($source);
+        $targetRef = new \ReflectionObject($target);
 
-        foreach ($oldReflection->getProperties() as $property) {
-
+        foreach ($sourceRef->getProperties() as $property) {
             $propertyName = !empty($mapArray) && isset($mapArray[$property->getName()])
                 ? $mapArray[$property->getName()]
                 : $property->getName();
 
             if (
                 $this->isAnnotationallyExcluded($property)
-                || !$newReflection->hasProperty($propertyName)
+                || !$targetRef->hasProperty($propertyName)
                 || \in_array($property->getName(), $this->excludeFields, true)
-                || $this->isAnnotationallyExcluded($newReflection->getProperty($propertyName))
+                || $this->isAnnotationallyExcluded($targetRef->getProperty($propertyName))
             ) {
                 continue;
             }
 
-            $newProperty = $newReflection->getProperty($propertyName);
+            $newProperty = $targetRef->getProperty($propertyName);
             $newProperty->setAccessible(true);
             $property->setAccessible(true);
-            $newProperty->setValue($to, $property->getValue($from));
+            $newProperty->setValue($target, $property->getValue($source));
         }
 
-        return $to;
+        return $target;
     }
 //endregion Public
 
